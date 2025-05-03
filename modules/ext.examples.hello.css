@@ -1,0 +1,286 @@
+/**
+ * CSS for the Examples extension - flowers, background animations, sun, and clouds
+ */
+
+/* Green Background Animation (Ground) */
+@keyframes greenPhase {
+  0%   { background-color: #e8f5e9; } /* Light Green */
+  25%  { background-color: #c8e6c9; }
+  50%  { background-color: #a5d6a7; } /* Medium Green */
+  75%  { background-color: #81c784; }
+  100% { background-color: #e8f5e9; } /* Back to Light Green */
+}
+
+/* Blue Background Animation (Sky) */
+@keyframes bluePhase {
+  0%   { background-color: #e3f2fd; } /* Light Blue */
+  25%  { background-color: #bbdefb; }
+  50%  { background-color: #90caf9; } /* Medium Blue */
+  75%  { background-color: #64b5f6; }
+  100% { background-color: #e3f2fd; } /* Back to Light Blue */
+}
+
+/* Sun Animations */
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+@keyframes sunColor {
+  0%, 100% { background-color: #ffcc80; } /* Light Orange */
+  25% { background-color: #ffb74d; } /* Orange */
+  50% { background-color: #ffa726; } /* Deeper Orange */
+  75% { background-color: #ff8a65; } /* Light Red-Orange */
+}
+
+/* Cloud Animation */
+@keyframes cloudFloat {
+  from { transform: translateX(100vw); } /* Start off-screen right */
+  to   { transform: translateX(-150px); } /* End off-screen left */
+}
+
+body {
+  /* Keep the green animation for the main page body (ground) */
+  animation-name: greenPhase;
+  animation-duration: 20s; /* Adjust duration as needed */
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  position: relative; /* Needed for absolute positioning of clouds if appended to body */
+  overflow-x: hidden; /* Prevent horizontal scrollbar from clouds */
+}
+
+/* Apply Blue animation to Header, Footer, Side Panels (Sky elements) */
+.vector-header-container,
+.vector-sticky-header-container, /* Includes sticky header */
+.mw-footer-container,
+#mw-panel, /* Left sidebar panel */
+.vector-column-start, /* Container for left sidebar */
+.vector-column-end /* Container for right sidebar/tools */ {
+  animation-name: bluePhase;
+  animation-duration: 25s; /* Slightly different duration for variation */
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  /* Ensure background covers the element */
+  background-clip: padding-box;
+}
+
+/* Optional: Ensure content text area retains a distinct background or inherits body */
+#mw-content-text {
+  position: relative; /* Needed for positioning flowers/player/bullets */
+  z-index: 1; /* Below game UI, potentially above background elements */
+  background-color: rgba(255, 255, 255, 0.8); /* Optional semi-transparent white overlay */
+  border-radius: 5px; /* Optional rounded corners */
+  padding: 1em; /* Optional padding */
+  min-height: 500px; /* Ensure some space for the game */
+  /* animation-name: greenPhase; */ /* Can remove if body animation is sufficient */
+  /* animation-duration: 20s; */
+  /* animation-iteration-count: infinite; */
+  /* animation-timing-function: ease-in-out; */
+}
+
+/* Static Sun Style */
+.static-sun {
+  position: fixed; /* Fixed position relative to viewport */
+  top: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  z-index: 900; /* Below clouds */
+  animation: sunPulse 4s infinite ease-in-out, sunColor 10s infinite linear;
+  box-shadow: 0 0 20px 5px rgba(255, 165, 0, 0.7); /* Add a glow */
+}
+
+/* Floating Cloud Style */
+.floating-cloud {
+  position: absolute; /* Position relative to nearest positioned ancestor (body or #mw-content-text) */
+  top: 10px; /* Adjust vertical position */
+  width: 100px; /* Adjust size */
+  height: 60px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 70'><path fill='%23FFFFFF' d='M10 40 Q0 50 15 60 H105 Q120 50 110 40 Q100 20 80 30 Q70 10 50 25 Q30 15 10 40 Z'/><path fill='%23F0F0F0' d='M20 45 Q10 55 25 65 H95 Q110 55 100 45 Q90 25 70 35 Q60 15 40 30 Q20 20 20 45 Z' transform='translate(5, 5)'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 950; /* Below flowers/player */
+  animation: cloudFloat 30s linear infinite; /* Adjust duration for speed */
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Player Style (simple triangle for now) */
+.player {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid steelblue; /* Player color */
+    z-index: 1050; /* Above flowers */
+    /* Transform origin for rotation */
+    transform-origin: center 10px; /* Adjust based on triangle shape */
+}
+
+/* Bullet Style */
+.bullet {
+    position: absolute;
+    width: 4px;
+    height: 8px;
+    background-color: black; /* Changed to black */
+    border-radius: 2px;
+    z-index: 1040; /* Above flowers, below player */
+    pointer-events: none;
+}
+
+/* --- Existing Flower and Explosion Styles --- */
+
+.examples-sunflower {
+    position: absolute;
+    /* Updated SVG with 24 petals */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><radialGradient id='centerGrad' cx='50%' cy='50%' r='50%'><stop offset='0%' stop-color='rgb(101,67,33)'/><stop offset='100%' stop-color='rgb(139,69,19)'/></radialGradient><linearGradient id='petalGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' stop-color='rgb(255,223,0)'/><stop offset='100%' stop-color='rgb(255,193,7)'/></linearGradient></defs><g transform='translate(50,50)'><!-- 24 petals --><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(0)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(15)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(30)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(45)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(60)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(75)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(90)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(105)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(120)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(135)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(150)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(165)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(180)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(195)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(210)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(225)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(240)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(255)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(270)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(285)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(300)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(315)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(330)'/><path d='M0 -50 C 12 -40, 12 -20, 0 -10 C -12 -20, -12 -40, 0 -50 Z' fill='url(%23petalGrad)' transform='rotate(345)'/><!-- center disk --><circle cx='0' cy='0' r='18' fill='url(%23centerGrad)'/></g></svg>");
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1000; /* Below player/bullets, above clouds/sun */
+    pointer-events: none; /* Make sure clicks pass through */
+}
+
+/* Base Tulip Style - Updated SVG */
+.examples-tulip {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1000; /* Below player/bullets, above clouds/sun */
+    pointer-events: none; /* Make sure clicks pass through */
+    /* Base SVG - colors will be overridden by variants */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='tGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' stop-color='CURRENT'/><stop offset='100%' stop-color='SHADE'/></linearGradient></defs><g transform='translate(50,60)'><path d='M0,-40 C12,-35 18,-15 0,0 C-18,-15 -12,-35 0,-40 Z' fill='url(%23tGrad)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(-20)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(20)'/></g><rect x='48' y='60' width='4' height='30' fill='green'/></svg>");
+}
+
+/* Tulip Color Variants - Updated SVGs with specific colors */
+.examples-tulip.tulip-red {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='tGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' stop-color='red'/><stop offset='100%' stop-color='darkred'/></linearGradient></defs><g transform='translate(50,60)'><path d='M0,-40 C12,-35 18,-15 0,0 C-18,-15 -12,-35 0,-40 Z' fill='url(%23tGrad)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(-20)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(20)'/></g><rect x='48' y='60' width='4' height='30' fill='green'/></svg>");
+}
+.examples-tulip.tulip-pink {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='tGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' stop-color='pink'/><stop offset='100%' stop-color='deeppink'/></linearGradient></defs><g transform='translate(50,60)'><path d='M0,-40 C12,-35 18,-15 0,0 C-18,-15 -12,-35 0,-40 Z' fill='url(%23tGrad)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(-20)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(20)'/></g><rect x='48' y='60' width='4' height='30' fill='green'/></svg>");
+}
+.examples-tulip.tulip-yellow {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='tGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' stop-color='yellow'/><stop offset='100%' stop-color='gold'/></linearGradient></defs><g transform='translate(50,60)'><path d='M0,-40 C12,-35 18,-15 0,0 C-18,-15 -12,-35 0,-40 Z' fill='url(%23tGrad)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(-20)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(20)'/></g><rect x='48' y='60' width='4' height='30' fill='green'/></svg>");
+}
+.examples-tulip.tulip-orange {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='tGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' stop-color='orange'/><stop offset='100%' stop-color='darkorange'/></linearGradient></defs><g transform='translate(50,60)'><path d='M0,-40 C12,-35 18,-15 0,0 C-18,-15 -12,-35 0,-40 Z' fill='url(%23tGrad)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(-20)'/><path d='M0,-40 C8,-38 25,-18 5,5 C-15,-18 -8,-38 0,-40 Z' fill='url(%23tGrad)' transform='rotate(20)'/></g><rect x='48' y='60' width='4' height='30' fill='green'/></svg>");
+}
+
+/* Heart Power-up Style */
+.powerup-heart {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    /* Simple heart shape using pseudo-elements */
+    border-radius: 50% 50% 0 0;
+    transform: rotate(-45deg);
+    z-index: 1030; /* Above flowers, below bullets/player */
+    pointer-events: none; /* Let collision detection handle it */
+}
+.powerup-heart::before,
+.powerup-heart::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: red;
+}
+.powerup-heart::before {
+    top: -12.5px; /* Half the height */
+    left: 0;
+}
+.powerup-heart::after {
+    top: 0;
+    left: 12.5px; /* Half the width */
+}
+
+/* Explosion Parts */
+.explosion-part {
+    position: absolute;
+    width: 10px; /* Small parts */
+    height: 10px;
+    background-color: orange; /* Simple color */
+    border-radius: 50%; /* Make them circular */
+    z-index: 1001; /* Above flowers, below player/bullets */
+    pointer-events: none;
+}
+
+/* Game Over Screen */
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Above everything else */
+    font-family: sans-serif;
+    text-align: center;
+}
+
+#game-over-screen h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: red;
+}
+
+#restart-button {
+    padding: 15px 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#restart-button:hover {
+    background-color: #45a049;
+}
+
+/* Start Screen */
+#start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Above everything else */
+    font-family: sans-serif;
+    text-align: center;
+}
+
+#start-screen h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: lightblue;
+}
+
+#start-button {
+    padding: 15px 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#start-button:hover {
+    background-color: #45a049;
+}

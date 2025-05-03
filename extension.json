@@ -1,0 +1,47 @@
+{
+	"name": "Examples",
+	"author": "Your Name",
+	"url": "https://www.mediawiki.org/wiki/Extension:Examples",
+	"license-name": "GPL-2.0-or-later",
+	"version": "0.0.1",
+	"namemsg": "examples",
+	"descriptionmsg": "examples-desc",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.42.0"
+	},
+	"manifest_version": 2,
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\Examples\\": "includes/"
+	},
+	"MessagesDirs": {
+		"Examples": [
+			"i18n"
+		]
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "Examples"
+	},
+	"ResourceModules": {
+		"ext.examples.hello": {
+			"scripts": [
+				"modules/ext.examples.hello.js"
+			],
+			"styles": [
+				"modules/ext.examples.hello.css"
+			],
+			"dependencies": [
+				"jquery",
+				"mediawiki.util"
+			],
+			"messages": []
+		}
+	},
+	"ExtensionMessagesFiles": {
+		"ExamplesAlias": "Examples.i18n.alias.php"
+	},
+	"SpecialPages": {
+		"ExamplesHello": "MediaWiki\\Extension\\Examples\\SpecialHello"
+	}
+}
