@@ -30,3 +30,15 @@ A simple example MediaWiki extension that adds a special page saying hello, now 
     wfLoadExtension( 'Examples' );
     ```
 4.  Visit `Special:ExamplesHello` on your wiki.
+
+## Screenshots through time
+
+### Asteroid mode
+
+After sucking in https://github.com/KevinPayravi/WikiAsteroids
+
+TODO
+
+### Pre asteroids
+
+![](https://i.imgur.com/uPB2Ij2.png)
